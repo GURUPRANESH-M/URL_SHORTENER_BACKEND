@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -20,21 +21,35 @@ public class URLService {
     private URLRepository urlRepository;
     private Base62Utility base62Utility;
 
-
+    public URLService(URLRepository urlRepository, Base62Utility base62Utility) {
+        this.urlRepository = urlRepository;
+        this.base62Utility = base62Utility;
+    }
 
     public String shorten_url(String url) {
-//        String prefix = "localhost:8080/";
-//        int random = ThreadLocalRandom.current().nextInt(1,10001);
-//        URLDetails urlDetails = new URLDetails();
-//        urlDetails.setActualUrl(url);
-//        urlDetails.setShortenUrl(String.valueOf(random));
-//        urlRepository.save(urlDetails);
-//        return prefix+random;
+
+        URLDetails urlDetails = new URLDetails();
+        urlDetails.setActualUrl(url);
+
+        URLDetails urlDetails1 = urlRepository.save(urlDetails);
+        String shortenedUrl = base62Utility.encode(urlDetails1.getId());
+        urlDetails.setShortenUrl(shortenedUrl);
+
+        urlRepository.save(urlDetails);
+
+        return "localhost:8080/"+shortenedUrl;
     }
 
 
     public String getActualUrl(String url) {
 
-        return "";
+        URLDetails urlDetails = urlRepository.findByShortenUrl(url)
+                .orElseThrow(() -> new RuntimeException("url error"));
+        String actualUrl = urlDetails.getActualUrl();
+
+        if(!actualUrl.startsWith("http")) actualUrl = "https://".concat(actualUrl);
+
+        System.out.println(actualUrl);
+        return actualUrl;
     }
 ;}

@@ -1,6 +1,12 @@
 package com.example.URLShortener.utility;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Base62Utility {
+
+    public Base62Utility() {
+    }
 
     private static final String base62Characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 

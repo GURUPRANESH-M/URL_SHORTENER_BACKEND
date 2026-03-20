@@ -10,7 +10,7 @@ public class URLDetails {
     private Long id;
     @Column(name = "actual_url", nullable = false, length = 2048)
     private String actualUrl;
-    @Column(name = "shorten_url", nullable = false)
+    @Column(name = "shorten_url")
     private String shortenUrl;
 
     public URLDetails() {

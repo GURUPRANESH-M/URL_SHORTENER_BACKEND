@@ -44,10 +44,8 @@ public class URLService {
     public String getActualUrl(String url) {
 
         URLDetails urlDetails = urlRepository.findByShortenUrl(url)
-                .orElseThrow(() -> new RuntimeException("url error"));
+                .orElseThrow(() -> new RuntimeException("url is not valid"));
         String actualUrl = urlDetails.getActualUrl();
-
-        if(!actualUrl.startsWith("http")) actualUrl = "https://".concat(actualUrl);
 
         System.out.println(actualUrl);
         return actualUrl;
